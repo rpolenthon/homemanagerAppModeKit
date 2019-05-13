@@ -25,7 +25,7 @@ Example
 		"checkConnectionTimeout" : 5,
 		"maxConnectionRequests" : 3,
 		"logShell" : false
-	}
+}
 ```
 
 | Key      | Description  |
@@ -41,3 +41,29 @@ Example
 | checkConnectionTimeout     | Timeout in seconds for the connection check.       |
 | maxConnectionRequests     | The maximum of request / trys for a new connection.       |
 | logShell     | Use this for debuging. If enabled, every output will be logged to the LogFile.       |
+
+
+# Model Settings
+
+Enter your own supported models.
+
+Example
+
+```json
+"modelSettings": {
+		"models": {
+			"pi3b+": "Raspberry Pi 3 B+"
+
+		},
+		"pi3b+WLANEnabled": true
+}
+```
+
+| Key      | Description  |
+| -------- | ---------    |
+| models     | Dictionary of your supported models. The key represents an identifier for interactions and the value represents the displayed name in the app.    |
+| YOURMODELIDWLANEnabled     | Define if this device supports WLAN. If you need other parameters, please contact us.         |
+
+
+
+
