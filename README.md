@@ -1,2 +1,2 @@
-# homemanagerAppModeKit
-Official Homemanger App Mode Developer Informations and Instructions
+# Homemanager AppModeKit Instructions
+Official Homemanger AppModeKit Developer Informations and Instructions
