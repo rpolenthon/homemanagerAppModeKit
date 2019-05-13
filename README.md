@@ -65,5 +65,7 @@ Example
 | YOURMODELIDWLANEnabled     | Define if this device supports WLAN. If you need other parameters, please contact us.         |
 
 
+## License
 
+Copyright 20189 by Ron Polenthon. Licensed under MIT.
 
