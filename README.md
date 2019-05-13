@@ -34,7 +34,7 @@ Example
 | author     | Your name.         |
 | appModeName   | Name of your configuration displayed in the app.         |
 | id | You will receive a unique id in case your AppMode will be added globaly. Otherwise dont change the id.      |
-| website     | Your Website. Otherwise choose our one.       |
+| website     | Your website. Otherwise choose our one.       |
 | email | Contact email for questions from users. If you dont want get emails, choose our one.        |
 | appModeSyntax     | Just use the one from the example.       |
 | shellNewReadyLineDetection | Enter an identifier which is ever presented in a new ready to interact shell line. Example: pi@bestpi:~ $ ->  :~ |
