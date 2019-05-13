@@ -55,7 +55,7 @@ Example
 			"pi3b+": "Raspberry Pi 3 B+"
 
 		},
-		"pi3b+WLANEnabled": true
+		"pi3b+WLANEnabled": true  //Optional, Default: false
 }
 ```
 
