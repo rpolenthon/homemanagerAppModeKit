@@ -49,7 +49,7 @@ Enter your own supported models.
 
 Example
 
-```json
+```javascript
 "modelSettings": {
 		"models": {
 			"pi3b+": "Raspberry Pi 3 B+"
@@ -67,5 +67,5 @@ Example
 
 ## License
 
-Copyright 20189 by Ron Polenthon. Licensed under MIT.
+Copyright 2019 by Ron Polenthon. Licensed under MIT.
 
