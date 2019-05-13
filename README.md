@@ -43,6 +43,16 @@ Example
 | logShell     | Use this for debuging. If enabled, every output will be logged to the LogFile.       |
 
 
+# Global Constants
+
+You can use the following global constants in your commands.
+
+
+| Constant      | Description  |
+| -------- | ---------    |
+| ADConnPass     | The password the app uses for a SHH connection.    |
+
+
 # Model Settings
 
 Enter your own supported models.
@@ -63,6 +73,28 @@ Example
 | -------- | ---------    |
 | models     | Dictionary of your supported models. The key represents an identifier for interactions and the value represents the displayed name in the app.    |
 | YOURMODELIDWLANEnabled     | Define if this device supports WLAN. If you need other parameters, please contact us.         |
+
+
+# Global Instant Interaction
+
+Define globaly for all features on which output the manager should instant respond.
+
+Example
+
+```javascript
+"globalShellInstantInteractions": {
+	  
+	  "[sudo] password for" : "ADConnPass",
+	  "Password:" : "ADConnPass",
+	  "Do you want to continue? [Y/n]" : "y"
+	  
+}
+```
+
+| Key      | Description  |
+| -------- | ---------    |
+| YOURKEY     | If the key is found in the shell output, the app will instant enter the command from the defined value.     |
+
 
 
 ## License
