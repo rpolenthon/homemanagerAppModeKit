@@ -194,20 +194,41 @@ Full Part:
           }
         ],
         "instantReactions": {
-          "blub": "y"
-        },
-        "pluginNames": "plugin",
-        "pluginVersion": "version"
+          "press y to continue": "y"
+        }
+        
       }
     }
   }
 ```
 
 
+```javascript
+"otherModels": {
+      "isSupported": true,
+      "commandIDs": [
+        "getNPMPlugins"
+      ],
+      "getNPMPluginsSettings": {}
+    }
+```
 
+| Key      | Description  |
+| -------- | ---------    |
+| isSupported     | Bool Value. If set to true the feature is enabled in the app. Otherwise the user get the feature not displayed      |
+| specificModelID     | Use your custom model key for a dictionary if the following interactions should be only used for this model.     |
 
+```javascript
+"exampleFeature": {
+    "otherModels": {},
+    "specificModelID" : {}
+  }
+```
 
-
+| Key      | Description  |
+| -------- | ---------    |
+| otherModels     | Use this key for a dictionary if the following interactions should be used for all models.     |
+| specificModelID     | Use your custom model key for a dictionary if the following interactions should be only used for this model.     |
 
 
 
