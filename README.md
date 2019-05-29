@@ -254,8 +254,48 @@ Full Part:
 | successPossibilitys     | Optional. Array of strings. Every string represents a indicator wherever the command succeeded. If not set, default success is if a new shell interaction possibility is available (Not in case of an error).     |
 | errorPossibilitys     | Optional. Dictionary of strings. Use the key for the value which can be found in the shell output and the value for the error description displayed in the app.    |
 | showLogAfterError     | Bool value. If set to true after an error the app presents an error to the user ans asks him, if he want see the shell output (can be shared).     |
-| analyze     | Optional. Dictionary. Use it for filtering, extracting values and checking for strings in the output. For details see below.     |
+| analyze     | Optional. Array of analyze objects. Use it for filtering, extracting values and checking for strings in the output. For details see below.     |
 | instantReactions     | Optional. Dictionary. Similar to the global instant reactions, use it for command specific reactions.     |
+
+
+
+```javascript
+"analyze": [
+    {
+      "filter": {},
+      "extract": {},
+      "check": {},
+      "analyze": [
+        {
+          "filter": {},
+          "extract": {},
+          "check": {}
+        },
+        {
+          "filter": {},
+          "extract": {},
+          "check": {}
+        }
+      ]
+    },
+    {
+      "filter": {},
+      "extract": {},
+      "check": {}
+    }
+  ]
+```
+
+Objects in `analyze` are unlimited.
+Every `analyze` object can contain another `analyze` array. 
+Every object uses as root filter string the last filtered string before the `analyze` array.
+
+| Key      | Description  |
+| -------- | ---------    |
+| filter     | Optional. Dictionary to filter the previous level output string. See below.    |
+| extract     | Optional. Dictionary to extract values from the filterd output string.     |
+| check     | Optional. Dictionary to check the filtered output string for specific values.     |
+
 
 
 
