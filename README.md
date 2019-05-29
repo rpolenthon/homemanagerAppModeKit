@@ -252,8 +252,10 @@ Full Part:
 | customOutputStart     | Optional. You can enter a string which defines when the shell output should be recored. Even if this key is defined, the ouput before this string can be added, because its just a check if the current shell part is the needed one. If not defined the output is recorded after the command.      |
 | customOutputStop     | Optional. Same as `customOutputStart`, but from the other side. Output will be stopped by default after a new detected shell interaction possibility.     |
 | successPossibilitys     | Optional. Array of strings. Every string represents a indicator wherever the command succeeded. If not set, default success is if a new shell interaction possibility is available (Not in case of an error).     |
-
-
+| errorPossibilitys     | Optional. Dictionary of strings. Use the key for the value which can be found in the shell output and the value for the error description displayed in the app.    |
+| showLogAfterError     | Bool value. If set to true after an error the app presents an error to the user ans asks him, if he want see the shell output (can be shared).     |
+| analyze     | Optional. Dictionary. Use it for filtering, extracting values and checking for strings in the output. For details see below.     |
+| instantReactions     | Optional. Dictionary. Similar to the global instant reactions, use it for command specific reactions.     |
 
 
 
