@@ -218,17 +218,41 @@ Full Part:
 | isSupported     | Bool Value. If set to true the feature is enabled in the app. Otherwise the user get the feature not displayed      |
 | specificModelID     | Use your custom model key for a dictionary if the following interactions should be only used for this model.     |
 
+
+
 ```javascript
-"exampleFeature": {
-    "otherModels": {},
-    "specificModelID" : {}
-  }
+"getNPMPluginsSettings": {
+        "shellType": "single",
+        "shellNumber": 1,
+        "timeout": 25,
+        "command": "my favourite command",
+        "customOutputStart": "task is starting...",
+        "customOutputStop": "finished task",
+        "successPossibilitys": [
+          "installation completed",
+          "packages updated"
+        ],
+        "errorPossibilitys": {
+          "error while unpacking stuff": "During example feature the execution of my favourite command produced a error."
+        },
+        "showLogAfterError": true,
+        "analyze": [],
+        "instantReactions": {
+          "press y to continue": "y"
+        }
+      }
 ```
 
 | Key      | Description  |
 | -------- | ---------    |
-| otherModels     | Use this key for a dictionary if the following interactions should be used for all models.     |
-| specificModelID     | Use your custom model key for a dictionary if the following interactions should be only used for this model.     |
+| shellType     | Currently only `single` is supported. Use `single` for normal shell interactions and `multi`for not ending interactions with not specific commands (e.g. terminal).     |
+| shellNumber     | Number value. Use shell `1` for interactions which can be done in a few seconds, for example getting the status of instances or config files. Use shell `2` for interactions which will be perforemd over a longer period of time, for example requesting the plugins or installations and configurations.     |
+| timeout     | Number value. The number in seconds for the command timeout. If the command has no result after this time, status timeout will be reported.     |
+| command     | The command, which will be performed in the shell. It can be static without changes and also dynamic. Dynamic commands are feature specific. Every feature has its own provided dynamic values, which can be used in the command. Every dynamic value starts with `HMIV` and ends with the provided value key, e.g. `HMIVinstancePath` .   |
+| customOutputStart     | Optional. You can enter a string which defines when the shell output should be recored. Even if this key is defined, the ouput before this string can be added, because its just a check if the current shell part is the needed one. If not defined the output is recorded after the command.      |
+| customOutputStop     | Optional. Same as `customOutputStart`, but from the other side. Output will be stopped by default after a new detected shell interaction possibility.     |
+| successPossibilitys     | Optional. Array of strings. Every string represents a indicator wherever the command succeeded. If not set, default success is if a new shell interaction possibility is available (Not in case of an error).     |
+
 
 
 
