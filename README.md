@@ -319,6 +319,30 @@ Every object uses as root filter string the last filtered string before the `ana
 
 
 
+```javascript
+"extract": {
+              "repeat": "all",
+              "extractFrom": "line",
+              "values": {
+                "someGreatData": "standardoutputVALUEafteroutput",
+                "someGreatDataLineRequirements": [
+                  "├",
+                  "@"
+                ],
+                "someImportantVersion": "version: VALUE "
+              }
+            },
+```
+
+| Key      | Description  |
+| -------- | ---------    |
+| repeat     | Can be `single`, `all` or a number as string. Use this to define how many times values can be extracted.     |
+| extractFrom     | Can be `line` or `nextPosition`. `line` means every value will be only extracted from one line. `nextPosition` means every next value will be extracted.    |
+| values     | Dictionary. See below.     |
+
+You can add unlimited values to the values dictionary. Use as key a identifer without space, this identifer will be used to pass the value to the specific feature, for details please see the description of every feature.
+The value part describes where to find your `VALUE`.
+
 
 
 ## License
