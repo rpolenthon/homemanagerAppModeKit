@@ -297,10 +297,25 @@ Every object uses as root filter string the last filtered string before the `ana
 | check     | Optional. Dictionary to check the filtered output string for specific values.     |
 
 
+```javascript
+"filter": {
+              "mode": "line",
+              "start": "{",
+              "stop": "}",
+              "includeFilterMarkers": true,
+              "removeWhitespaces": false,
+              "removeLines": false
+            },
+```
 
-
-
-
+| Key      | Description  |
+| -------- | ---------    |
+| mode     | Can be `line` or `character`. `line` means the output start and end points are the full line. `character` means the output will start with the first character and ends with the last character.     |
+| start     | Start string     |
+| stop     | Stop string     |
+| includeFilterMarkers     | Bool value. If set to true, in mode `line` the line containing the start or stop string will be included. In mode `character` the character will be included. If set to false, it will use only the line after, or the character after the filter.     |
+| removeWhitespaces     | Bool value. Will be added after the above filter. If set to true, every whitespaces will be removed.     |
+| removeLines     | Bool value. Will be added after the above filter. If set to true, every line will be removed.     |
 
 
 
