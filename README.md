@@ -305,7 +305,7 @@ Every object uses as root filter string the last filtered string before the `ana
               "includeFilterMarkers": true,
               "removeWhitespaces": false,
               "removeLines": false
-            },
+            }
 ```
 
 | Key      | Description  |
@@ -331,7 +331,7 @@ Every object uses as root filter string the last filtered string before the `ana
                 ],
                 "someImportantVersion": "version: VALUE "
               }
-            },
+            }
 ```
 
 | Key      | Description  |
@@ -341,7 +341,32 @@ Every object uses as root filter string the last filtered string before the `ana
 | values     | Dictionary. See below.     |
 
 You can add unlimited values to the values dictionary. Use as key a identifer without space, this identifer will be used to pass the value to the specific feature, for details please see the description of every feature.
-The value part describes where to find your `VALUE`.
+The value part describes where to find your `VALUE`. 
+If `extractFrom` is set to `line` you have also the possibility to add requirements for a line. Do this by defining a array with your value identifer and `LineRequirements`. Every element in the array has to be in the output for success.
+
+
+```javascript
+"check": {
+              "checkFrom": "nextPosition",
+              "values": {
+                "deactivatedLineRequirements": [
+                  "├",
+                  "@"
+                ],
+                "deactivated": "disabled"
+              }
+            }
+```
+
+| Key      | Description  |
+| -------- | ---------    |
+| checkFrom     | Can be `line` or `nextPosition`. Tip: use line if you need requirements to make sure the check will not check the wrong data. Otherwise you can just use nextPosition.    |
+| values     | Dictionary. See below.     |
+
+You can add unlimited values to the values dictionary. Use as key a identifer without space, this identifer will be used to pass the value to the specific feature, for details please see the description of every feature.
+The value part describes which strings has to be in the output to return a positive check.
+If `extractFrom` is set to `line` you have also the possibility to add requirements for a line. Do this by defining a array with your value identifer and `LineRequirements`. Every element in the array has to be in the output for success.
+
 
 
 
