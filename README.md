@@ -253,7 +253,7 @@ Full Part:
 | customOutputStop     | Optional. Same as `customOutputStart`, but from the other side. Output will be stopped by default after a new detected shell interaction possibility.     |
 | successPossibilitys     | Optional. Array of strings. Every string represents a indicator wherever the command succeeded. If not set, default success is if a new shell interaction possibility is available (Not in case of an error).     |
 | errorPossibilitys     | Optional. Dictionary of strings. Use the key for the value which can be found in the shell output and the value for the error description displayed in the app.    |
-| showLogAfterError     | Bool value. If set to true after an error the app presents an error to the user ans asks him, if he want see the shell output (can be shared).     |
+| showLogAfterError     | Bool value. If set to true after an error the app presents an error to the user and asks him, if he want see the shell output (can be shared).     |
 | analyze     | Optional. Array of analyze objects. Use it for filtering, extracting values and checking for strings in the output. For details see below.     |
 | instantReactions     | Optional. Dictionary. Similar to the global instant reactions, use it for command specific reactions.     |
 
@@ -310,10 +310,10 @@ Every object uses as root filter string the last filtered string before the `ana
 
 | Key      | Description  |
 | -------- | ---------    |
-| mode     | Can be `line` or `character`. `line` means the output start and end points are the full line. `character` means the output will start with the first character and ends with the last character.     |
+| mode     | Can be `line` or `character`. `line` means the output start and end points are the full line. `character` means the output will start with the first character and ends with the last character / string.     |
 | start     | Start string     |
 | stop     | Stop string     |
-| includeFilterMarkers     | Bool value. If set to true, in mode `line` the line containing the start or stop string will be included. In mode `character` the character will be included. If set to false, it will use only the line after, or the character after the filter.     |
+| includeFilterMarkers     | Bool value. If set to true, in mode `line` the line containing the start or stop string will be included. In mode `character` the character / string will be included. If set to false, it will use only the line after, or the characters / string after the filter.     |
 | removeWhitespaces     | Bool value. Will be added after the above filter. If set to true, every whitespaces will be removed.     |
 | removeLines     | Bool value. Will be added after the above filter. If set to true, every line will be removed.     |
 
@@ -367,6 +367,10 @@ You can add unlimited values to the values dictionary. Use as key a identifer wi
 The value part describes which strings has to be in the output to return a positive check.
 If `extractFrom` is set to `line` you have also the possibility to add requirements for a line. Do this by defining a array with your value identifer and `LineRequirements`. Every element in the array has to be in the output for success.
 
+
+## Feature-Implementations
+
+Will be added soon!
 
 
 
