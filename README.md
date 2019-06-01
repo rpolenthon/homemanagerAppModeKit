@@ -206,6 +206,9 @@ Full Part:
 ```javascript
 "otherModels": {
       "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 1,
+      "showLogAfterError": true,
       "commandIDs": [
         "getNPMPlugins"
       ],
@@ -213,17 +216,20 @@ Full Part:
     }
 ```
 
+Initialize an dictionary inside the feature dictionary for specific models or all models. Use the key `otherModels` if for interactions which will be performed for every selected model. Use your custom modelID from the modelSettings array to seperate the interactions by models.
+
 | Key      | Description  |
 | -------- | ---------    |
 | isSupported     | Bool Value. If set to true the feature is enabled in the app. Otherwise the user get the feature not displayed      |
-| specificModelID     | Use your custom model key for a dictionary if the following interactions should be only used for this model.     |
-
+| shellType     | Currently only `single` is supported. Use `single` for normal shell interactions and `multi`for not ending interactions with not specific commands (e.g. terminal).     |
+| shellNumber     | Number value. Use shell `1` for interactions which can be done in a few seconds, for example getting the status of instances or config files. Use shell `2` for interactions which will be perforemd over a longer period of time, for example requesting the plugins or installations and configurations.     |
+| showLogAfterError     | Bool value. If set to true after an error the app presents an error to the user and asks him, if he want see the shell output (can be shared).     |
+| commandIDs     | Array of string, ever string represents a identifer for every command. This identifer is used for the following settings part.     |
+| YOURIDSettings     | See below for details.      |
 
 
 ```javascript
 "getNPMPluginsSettings": {
-        "shellType": "single",
-        "shellNumber": 1,
         "timeout": 25,
         "command": "my favourite command",
         "customOutputStart": "task is starting...",
@@ -235,7 +241,6 @@ Full Part:
         "errorPossibilitys": {
           "error while unpacking stuff": "During example feature the execution of my favourite command produced a error."
         },
-        "showLogAfterError": true,
         "analyze": [],
         "instantReactions": {
           "press y to continue": "y"
@@ -245,15 +250,12 @@ Full Part:
 
 | Key      | Description  |
 | -------- | ---------    |
-| shellType     | Currently only `single` is supported. Use `single` for normal shell interactions and `multi`for not ending interactions with not specific commands (e.g. terminal).     |
-| shellNumber     | Number value. Use shell `1` for interactions which can be done in a few seconds, for example getting the status of instances or config files. Use shell `2` for interactions which will be perforemd over a longer period of time, for example requesting the plugins or installations and configurations.     |
 | timeout     | Number value. The number in seconds for the command timeout. If the command has no result after this time, status timeout will be reported.     |
 | command     | The command, which will be performed in the shell. It can be static without changes and also dynamic. Dynamic commands are feature specific. Every feature has its own provided dynamic values, which can be used in the command. Every dynamic value starts with `HMIV` and ends with the provided value key, e.g. `HMIVinstancePath` .   |
 | customOutputStart     | Optional. You can enter a string which defines when the shell output should be recorded. Even if this key is defined, the ouput before this string can be added, because its just a check if the current shell part is the needed one. If not defined the output is recorded after the command.      |
 | customOutputStop     | Optional. Same as `customOutputStart`, but from the other side. Output will be stopped by default after a new detected shell interaction possibility.     |
 | successPossibilitys     | Optional. Array of strings. Every string represents a indicator wherever the command succeeded. If not set, default success is if a new shell interaction possibility is available (Not in case of an error).     |
 | errorPossibilitys     | Optional. Dictionary of strings. Use the key for the value which can be found in the shell output and the value for the error description displayed in the app.    |
-| showLogAfterError     | Bool value. If set to true after an error the app presents an error to the user and asks him, if he want see the shell output (can be shared).     |
 | analyze     | Optional. Array of analyze objects. Use it for filtering, extracting values and checking for strings in the output. For details see below.     |
 | instantReactions     | Optional. Dictionary. Similar to the global instant reactions, use it for command specific reactions.     |
 
