@@ -370,9 +370,69 @@ The value part describes which strings has to be in the output to return a posit
 If `extractFrom` is set to `line` you have also the possibility to add requirements for a line. Do this by defining a array with your value identifer and `LineRequirements`. Every element in the array has to be in the output for success.
 
 
+
+
+
 ## Feature-Implementations
 
-Will be added soon!
+
+
+## Get Plugins
+This is implementation is needed to request the homebridge plugins. 
+
+Pass the plugin name with `plugin` and the version with `version` inside the `extract` part.
+
+`showLogAfterError` is not supported.
+Use `shellNumber` = 2 because plugin requests are not that fast.
+
+Example for Homemanager installation:
+
+```javascript
+"getPlugins": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 2,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "getNPMPlugins"
+      ],
+      "getNPMPluginsSettings": {
+        "timeout": 25,
+        "command": "sudo npm list -g --depth=0",
+        "successPossibilitys": [
+          "homebridge"
+        ],
+        "analyze": [
+          {
+            "extract": {
+              "repeat": "all",
+              "extractFrom": "line",
+              "values": {
+                "plugin": "homebridge-VALUE@",
+                "pluginLineRequirements": [
+                  "├",
+                  "@",
+                  "homebridge-"
+                ],
+                "version": "@VALUE",
+                "versionLineRequirements": [
+                  "├",
+                  "@",
+                  "homebridge-"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+```
+
+
+
+Others will be added soon!
 
 
 
