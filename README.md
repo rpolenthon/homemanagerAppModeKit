@@ -352,7 +352,7 @@ If `extractFrom` is set to `line` you have also the possibility to add requireme
 
 ```javascript
 "check": {
-              "checkFrom": "nextPosition",
+              "checkFrom": "line",
               "values": {
                 "deactivatedLineRequirements": [
                   "├",
