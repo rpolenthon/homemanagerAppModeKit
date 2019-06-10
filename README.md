@@ -380,7 +380,7 @@ If `extractFrom` is set to `line` you have also the possibility to add requireme
 ## Get Plugins
 This is implementation is needed to request the homebridge plugins. 
 
-Pass the plugin name with `plugin` and the version with `version` inside the `extract` part.
+Pass the plugin code (name excluding homebridge-) with `plugin` and the version with `version` inside the `extract` part.
 
 `showLogAfterError` is not supported.
 Use `shellNumber` = 2 because plugin requests are not that fast.
