@@ -378,7 +378,7 @@ If `extractFrom` is set to `line` you have also the possibility to add requireme
 
 
 ## Get Plugins
-This is implementation is needed to request the homebridge plugins. 
+This implementation is needed to request the homebridge plugins. 
 
 Pass the plugin code (name excluding homebridge-) with `plugin` and the version with `version` inside the `extract` part.
 
@@ -430,7 +430,85 @@ Example for Homemanager installation:
   }
 ```
 
+## Install Plugin
+This implementation is needed to request an installation of a plugin. 
 
+It is neccessary to define a success value. Other values are not required.
+
+`showLogAfterError` is supported and recommended.
+Use `shellNumber` = 2 because plugin installations are not that fast.
+
+Use `HMIVpluginInstallCommand` in the command to get the user entered command. If needed, add something before or after this key in the command string.
+
+The timeout is set to a high number, because plugins could be installed slowly with bad internet connections.
+
+
+Example for Homemanager installation:
+
+```javascript
+"installPlugin": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 2,
+      "showLogAfterError": true,
+      "commandIDs": [
+        "installPluginCmd"
+      ],
+      "installPluginCmdSettings": {
+        "timeout": 300,
+        "command": "HMIVpluginInstallCommand",
+        "successPossibilitys": [
+          "added"
+        ],
+        "errorPossibilitys": {
+          "404 Not Found": "Plugin not found. Check your name.",
+          "code EACCES": "The user has no permission to install the plugin.",
+          "ERR!": "General error during installation, please check the log or contact the support."
+        }
+      }
+    }
+  }
+```
+
+## Uninstall Plugin
+This implementation is needed to request an uninstallation of a plugin. 
+
+`showLogAfterError` is supported and recommended.
+Use `shellNumber` = 2 because plugin installations are not that fast.
+
+Use `HMIVpluginUninstallCommand` in the command to get the user entered command. If needed, add something before or after this key in the command string.
+
+The timeout is set to a high number, because plugins could be uninstalled slowly with bad internet connections.
+
+
+Example for Homemanager installation:
+
+```javascript
+"uninstallPlugin": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 2,
+      "showLogAfterError": true,
+      "commandIDs": [
+        "uninstallPluginCmd"
+      ],
+      "uninstallPluginCmdSettings": {
+        "timeout": 300,
+        "command": "HMIVpluginUninstallCommand",
+        "successPossibilitys": [
+          "removed"
+        ],
+        "errorPossibilitys": {
+          "404 Not Found": "Plugin not found. Check your name.",
+          "code EACCES": "The user has no permission to uninstall the plugin.",
+          "ERR!": "General error during uninstallation, please check the log or contact the support."
+        }
+      }
+    }
+  }
+```
 
 Others will be added soon!
 
