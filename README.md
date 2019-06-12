@@ -529,12 +529,110 @@ Now all upcomming instance related features will be defined starting with the fe
 
 ### Get instance Status
 
+This feature exists for getting the current status of a homebridge instance. 
+To request the status for the specific instance, the value `HMIVinstanceName` can be used in the command.
+
+Beacuse some interactions have to be quit before the shell can be used again, make sure that you use in this case the `commandAddons` with for example `SIGQ` to quit the action.
+
+`showLogAfterError` is not supported by this feature.
+
+If the autostart system provides a date of the last change, make sure that you define the `featureSettings` as shown below. If `timeStampPreperation` is activated, everything excluding numbers, "-" and ";" will be removed from the `timeStamp` string. This makes it easier to define the correct `timeStampFormat`.
+
+To extract a time stamp use the value key `timeStamp`.
+
+Not all autostart systems provide the following status types, so if your system not provide one of the statuses, just dont use this one in the analyze check section.
+
+Use `restart` to indicate whether the instance is restarting (error loop)
+Use `running` to indicate whether the instance is ready for use in HomeKit
+Use `stopped` to indicate whether the instance is stopped (if possibile, only if stopped manualy by user)
+Use `inactive` to indicate whether the instance isn´t ready to use (if possible, only if stopped without user interaction)
+Use `activated` to indicate whether the autostart is activated (only for supported systems)
+Use `deactivated` to indicate whether the autostart is deactivated (only for supported systems)
 
 
+Mark: Because of special vanilla shell formatting the string is maybe different at the beginning or end, not as in desktop terminals. This is why i used for `running` `mactive`. `active` alone could also be `inactive`. Because the beginning includes a m in the special shell version, i choosed this way. You can check the output in the app´s log file if `logShell` is set to `true`.
 
+Example systemd:
 
+```javascript
+"getInstanceStatussystemd": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 1,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "getStatus"
+      ],
+      "getStatusSettings": {
+        "timeout": 5,
+        "command": "sudo systemctl status HMIVinstanceName",
+        "commandAddons": [
+          "SIGQ"
+        ],
+        "successPossibilitys": [
+          "PID",
+          "(dead)"
+        ],
+        "analyze": [
+          {
+            "extract": {
+              "repeat": "single",
+              "extractFrom": "line",
+              "values": {
+                "timeStamp": "since VALUE;",
+                "timeStampLineRequirements": [
+                  "Active:"
+                ]
+              }
+            },
+            "check": {
+              "checkFrom": "line",
+              "values": {
+                "restartLineRequirements": [
+                  "Active:"
+                ],
+                "restart": "activating",
+                "runningLineRequirements": [
+                  "Active:"
+                ],
+                "running": "mactive",
+                "stoppedLineRequirements": [
+                  "Active:"
+                ],
+                "stopped": "failed",
+                "inactiveLineRequirements": [
+                  "Active:"
+                ],
+                "inactive": "inactive",
+                "activatedLineRequirements": [
+                  "Loaded:"
+                ],
+                "activated": "enabled",
+                "deactivatedLineRequirements": [
+                  "Loaded:"
+                ],
+                "deactivated": "disabled"
+              }
+            }
+          }
+        ]
+      },
+      "featureSettings": {
+        "timeStampPreperation": true,
+        "timeStampFormat": "yyyy-MM-ddHH:mm:ss"
+      }
+    }
+  }
+```
 
+## Change Instance Status
 
+This feature represents the interaction of the instance control buttons. To request the status change for the specific instance, the value `HMIVinstanceName` can be used in the command.
+
+If some interaction types are not supported for a instance type, just dont define them here in the file.
+
+Example:
 
 
 #### Others will be added soon!
