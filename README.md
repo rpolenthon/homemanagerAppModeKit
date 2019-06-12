@@ -10,7 +10,7 @@ You can test your settings inside the app by yourself. If you want to share your
 
 # General
 
-Example
+### Example
 
 ```json
 "general": {
@@ -61,7 +61,7 @@ You can use the following global constants in your commands.
 
 Enter your own supported models.
 
-Example
+### Example
 
 ```javascript
 "modelSettings": {
@@ -102,7 +102,7 @@ Example
 
 Every feature interaction is build on the same generic structure. In this example some available options are mentioned. For examples and feature specific settings take a look at the sections below.
 
-Full Part:
+### Full Part
 
 ```javascript
 "exampleFeature": {
@@ -388,7 +388,7 @@ Pass the plugin code (name excluding homebridge-) with `plugin` and the version 
 `showLogAfterError` is not supported.
 Use `shellNumber` = 2 because plugin requests are not that fast.
 
-Example for Homemanager installation:
+### Example for Homemanager installation
 
 ```javascript
 "getPlugins": {
@@ -446,7 +446,7 @@ Use `HMIVpluginInstallCommand` in the command to get the user entered command. I
 The timeout is set to a high number, because plugins could be installed slowly with bad internet connections.
 
 
-Example for Homemanager installation:
+### Example for Homemanager installation
 
 ```javascript
 "installPlugin": {
@@ -485,7 +485,7 @@ Use `HMIVpluginUninstallCommand` in the command to get the user entered command.
 The timeout is set to a high number, because plugins could be uninstalled slowly with bad internet connections.
 
 
-Example for Homemanager installation:
+### Example for Homemanager installation
 
 ```javascript
 "uninstallPlugin": {
@@ -517,7 +517,7 @@ Example for Homemanager installation:
 
 First of all define an array in the main object which contains the the supported instance types, e.g. systemd, initd, launchd or docker
 
-Example:
+### Example
 
 ```javascript
 "instanceTypes": [
@@ -552,7 +552,7 @@ Use `deactivated` to indicate whether the autostart is deactivated (only for sup
 
 Mark: Because of special vanilla shell formatting the string is maybe different at the beginning or end, not as in desktop terminals. This is why i used for `running` `mactive`. `active` alone could also be `inactive`. Because the beginning includes a m in the special shell version, i choosed this way. You can check the output in the app´s log file if `logShell` is set to `true`.
 
-Example systemd:
+### Example systemd
 
 ```javascript
 "getInstanceStatussystemd": {
@@ -630,9 +630,112 @@ Example systemd:
 
 This feature represents the interaction of the instance control buttons. To request the status change for the specific instance, the value `HMIVinstanceName` can be used in the command.
 
+`showLogAfterError` is not supported by this feature.
+
 If some interaction types are not supported for a instance type, just dont define them here in the file.
 
-Example:
+Use the following keys between `changeInstanceStatus` and the instance type:
+
+Use `restarting` to restart the instance
+Use `stopping` to stop the instance, but not to remove the autostart
+Use `activating` to enable the autostart if the system supports it
+Use `deactivating` to disable the autostart if the system supports it, this should not stop the instance itself.
+
+### Example Stopping
+
+
+```javascript
+"changeInstanceStatusstoppingsystemd": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 1,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "changeStatus"
+      ],
+      "changeStatusSettings": {
+        "timeout": 5,
+        "command": "sudo systemctl stop HMIVinstanceName"
+      },
+      "featureSettings": {
+        "timeBeforeRefresh": 5
+      }
+    }
+  }
+```
+
+### Example Restarting
+
+```javascript
+ "changeInstanceStatusrestartingsystemd": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 1,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "changeStatus"
+      ],
+      "changeStatusSettings": {
+        "timeout": 5,
+        "command": "sudo systemctl restart HMIVinstanceName"
+      },
+      "featureSettings": {
+        "timeBeforeRefresh": 5
+      }
+    }
+  }
+```
+
+### Example Activating
+
+```javascript
+ "changeInstanceStatusactivatingsystemd": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 1,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "changeStatus"
+      ],
+      "changeStatusSettings": {
+        "timeout": 5,
+        "command": "sudo systemctl enable HMIVinstanceName"
+      },
+      "featureSettings": {
+        "timeBeforeRefresh": 5
+      }
+    }
+  }
+```
+
+### Example Deactivating
+
+
+```javascript
+"changeInstanceStatusdeactivatingsystemd": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 1,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "changeStatus"
+      ],
+      "changeStatusSettings": {
+        "timeout": 5,
+        "command": "sudo systemctl disable HMIVinstanceName"
+      },
+      "featureSettings": {
+        "timeBeforeRefresh": 5
+      }
+    }
+  }
+```
+
+
 
 
 #### Others will be added soon!
