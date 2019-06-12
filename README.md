@@ -47,7 +47,7 @@ Example
 | appModeAccessible     | Bool value. If set to true, your AppMode can be edited inside the App. Otherwise the data stored in this file is only visible to us.       |
 
 
-## Global Constants
+### Global Constants
 
 You can use the following global constants in your commands.
 
@@ -57,7 +57,7 @@ You can use the following global constants in your commands.
 | ADConnPass     | The password the app uses for a SHH connection.    |
 
 
-## Model Settings
+### Model Settings
 
 Enter your own supported models.
 
@@ -77,7 +77,7 @@ Example
 | models     | Dictionary of your supported models. The key represents an identifier for interactions and the value represents the displayed name in the app.    |
 
 
-## Global Instant Interaction
+### Global Instant Interaction
 
 Define globaly for all features on which output the manager should instant respond.
 
@@ -378,9 +378,9 @@ If `extractFrom` is set to `line` you have also the possibility to add requireme
 
 # Feature-Implementations
 
+## Plugins
 
-
-## Get Plugins
+### Get Plugins
 This implementation is needed to request the homebridge plugins. 
 
 Pass the plugin code (name excluding homebridge-) with `plugin` and the version with `version` inside the `extract` part.
@@ -433,7 +433,7 @@ Example for Homemanager installation:
   }
 ```
 
-## Install Plugin
+### Install Plugin
 This implementation is needed to request an installation of a plugin. 
 
 It is neccessary to define a success value. Other values are not required.
@@ -474,7 +474,7 @@ Example for Homemanager installation:
   }
 ```
 
-## Uninstall Plugin
+### Uninstall Plugin
 This implementation is needed to request an uninstallation of a plugin. 
 
 `showLogAfterError` is supported and recommended.
@@ -513,7 +513,7 @@ Example for Homemanager installation:
   }
 ```
 
-### Instance Features
+## Instance Features
 
 First of all define an array in the main object which contains the the supported instance types, e.g. systemd, initd, launchd or docker
 
@@ -527,11 +527,17 @@ Example:
 Now all upcomming instance related features will be defined starting with the feature name and followed by the instance type. If you support different types, you have to define every feature for every type.
 
 
-## Get instance Status
+### Get instance Status
 
 
 
-Others will be added soon!
+
+
+
+
+
+
+#### Others will be added soon!
 
 
 
