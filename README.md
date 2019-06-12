@@ -513,6 +513,24 @@ Example for Homemanager installation:
   }
 ```
 
+## Instance Features
+
+First of all define an array in the main object which contains the the supported instance types, e.g. systemd, initd, launchd or docker
+
+Example:
+
+```javascript
+"instanceTypes": [
+    "systemd"
+  ]
+```
+Now all upcomming instance related features will be defined starting with the feature name and followed by the instance type. If you support different types, you have to define every feature for every type.
+
+
+# Get instance Status
+
+
+
 Others will be added soon!
 
 
