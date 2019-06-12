@@ -47,7 +47,7 @@ Example
 | appModeAccessible     | Bool value. If set to true, your AppMode can be edited inside the App. Otherwise the data stored in this file is only visible to us.       |
 
 
-# Global Constants
+## Global Constants
 
 You can use the following global constants in your commands.
 
@@ -57,7 +57,7 @@ You can use the following global constants in your commands.
 | ADConnPass     | The password the app uses for a SHH connection.    |
 
 
-# Model Settings
+## Model Settings
 
 Enter your own supported models.
 
@@ -77,7 +77,7 @@ Example
 | models     | Dictionary of your supported models. The key represents an identifier for interactions and the value represents the displayed name in the app.    |
 
 
-# Global Instant Interaction
+## Global Instant Interaction
 
 Define globaly for all features on which output the manager should instant respond.
 
@@ -98,7 +98,7 @@ Example
 | YOURKEY     | If the key is found in the shell output, the app will instant enter the command from the defined value.     |
 
 
-# Example for feature interactions
+## Example for feature interactions
 
 Every feature interaction is build on the same generic structure. In this example some available options are mentioned. For examples and feature specific settings take a look at the sections below.
 
@@ -376,7 +376,7 @@ If `extractFrom` is set to `line` you have also the possibility to add requireme
 
 
 
-## Feature-Implementations
+# Feature-Implementations
 
 
 
@@ -513,7 +513,7 @@ Example for Homemanager installation:
   }
 ```
 
-## Instance Features
+### Instance Features
 
 First of all define an array in the main object which contains the the supported instance types, e.g. systemd, initd, launchd or docker
 
@@ -527,7 +527,7 @@ Example:
 Now all upcomming instance related features will be defined starting with the feature name and followed by the instance type. If you support different types, you have to define every feature for every type.
 
 
-# Get instance Status
+## Get instance Status
 
 
 
