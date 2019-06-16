@@ -118,6 +118,7 @@ Every feature interaction is build on the same generic structure. In this exampl
         "timeout": 25,
         "command": "my favourite command",
 	"commandAddons": ["SIGQ"], 
+	"customShellNewReadyLineDetection": "root@",
         "customOutputStart": "task is starting...",
         "customOutputStop": "finished task",
         "successPossibilitys": [
@@ -235,6 +236,7 @@ Initialize an dictionary inside the feature dictionary for specific models or al
         "timeout": 25,
         "command": "my favourite command",
 	"commandAddons": ["SIGQ"], 
+	"customShellNewReadyLineDetection": "root@",
         "customOutputStart": "task is starting...",
         "customOutputStop": "finished task",
         "successPossibilitys": [
@@ -256,6 +258,7 @@ Initialize an dictionary inside the feature dictionary for specific models or al
 | timeout     | Number value. The number in seconds for the command timeout. If the command has no result after this time, status timeout will be reported.     |
 | command     | The command, which will be performed in the shell. It can be static without changes and also dynamic. Dynamic commands are feature specific. Every feature has its own provided dynamic values, which can be used in the command. Every dynamic value starts with `HMIV` and ends with the provided value key, e.g. `HMIVinstancePath` .   |
 | commandAddons     | Array value. If a command needs a special interaction before the next shell interaction possibility is ready, define strings in this array, which will be send after the normal \r of every command.     |
+| customShellNewReadyLineDetection     | If you used a command before which for example switched to user root, than the new ready shell line is different. Because after every command the shell is checking itself, you have to define the new shell detection for a successful check. The value will only be used at the beginning of the command, not to detect if it ends. Use therefore the `customOutputStop` definition.     |
 | customOutputStart     | Optional. You can enter a string which defines when the shell output should be recorded. Even if this key is defined, the ouput before this string can be added, because its just a check if the current shell part is the needed one. If not defined the output is recorded after the command.      |
 | customOutputStop     | Optional. Same as `customOutputStart`, but from the other side. Output will be stopped by default after a new detected shell interaction possibility.     |
 | successPossibilitys     | Optional. Array of strings. Every string represents a indicator wherever the command succeeded. If not set, default success is if a new shell interaction possibility is available (Not in case of an error).     |
