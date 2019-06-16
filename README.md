@@ -55,6 +55,7 @@ You can use the following global constants in your commands.
 | Constant      | Description  |
 | -------- | ---------    |
 | ADConnPass     | The password the app uses for a SHH connection.    |
+| ADConnUsrn     | The username the app uses for a SHH connection.    |
 
 
 ### Model Settings
