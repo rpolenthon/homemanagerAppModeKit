@@ -739,7 +739,225 @@ Use `deactivating` to disable the autostart if the system supports it, this shou
   }
 ```
 
+## Instance Service File Interactions
 
+Users can edit service related files under the instance settings tab. This feature is split into set and get. 
+
+First of all you need one array for every instance type you support, beginning with the name `instanceServiceFileTypes` and ending with the instance type.
+
+If you support the instance type `systemd` you should also integrate the service file types `.Service` and `Service Default` because the app will show up a graphic mask with the most relevant settings if these types are supported.
+
+Every set interaction is starting with `getInstanceServiceFile` followed by one of the keys of the `instanceServiceFileType` array and ends with the instance type.
+
+The following examples show the interaction with the instance type `systemd` for both service file types.
+
+`showLogAfterError` is not supported by this feature.
+
+
+### Example Instance Service File Types
+
+```javascript
+"instanceServiceFileTypessystemd": [
+    ".Service",
+    "Service Default"
+  ]
+```
+
+### Example Get .Service
+
+```javascript
+"getInstanceServiceFile.Servicesystemd": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 1,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "getFileString"
+      ],
+      "getFileStringSettings": {
+        "timeout": 8,
+        "command": "sudo cat /etc/systemd/system/HMIVinstanceName.service",
+        "successPossibilitys": [
+          "[Install]"
+        ],
+        "analyze": [
+          {
+            "filter": {
+              "mode": "line",
+              "start": "sudo cat /etc/systemd/",
+              "stop": ":~",
+              "includeFilterMarkers": false,
+              "removeWhitespaces": false,
+              "removeLines": false
+            },
+            "extract": {
+              "repeat": "single",
+              "extractFrom": "nextPosition",
+              "values": {
+                "fileString": "VALUE"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+```
+
+### Example Get Service Default
+
+```javascript
+"getInstanceServiceFileService Defaultsystemd": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 1,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "getFileString"
+      ],
+      "getFileStringSettings": {
+        "timeout": 8,
+        "command": "sudo cat /etc/default/HMIVinstanceName",
+        "successPossibilitys": [
+          "HOMEBRIDGE_OPTS"
+        ],
+        "analyze": [
+          {
+            "filter": {
+              "mode": "line",
+              "start": "sudo cat /etc/default/",
+              "stop": ":~",
+              "includeFilterMarkers": false,
+              "removeWhitespaces": false,
+              "removeLines": false
+            },
+            "extract": {
+              "repeat": "single",
+              "extractFrom": "nextPosition",
+              "values": {
+                "fileString": "VALUE"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+```
+
+### Example Set .Service
+
+```javascript
+"setInstanceServiceFile.Servicesystemd": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 1,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "switchToRoot",
+        "stopInstance",
+        "replaceFileString",
+        "daemon-reload",
+        "restartInstance",
+        "switchToNormalUser"
+      ],
+      "switchToRootSettings": {
+        "timeout": 5,
+        "command": "sudo su",
+        "customOutputStop": "root@"
+      },
+      "stopInstanceSettings": {
+        "timeout": 5,
+        "command": "sudo systemctl stop HMIVinstanceName",
+        "customOutputStop": "root@",
+        "customShellNewReadyLineDetection": "root@"
+      },
+      "replaceFileStringSettings": {
+        "timeout": 8,
+        "command": "sudo echo 'HMIVfileString' > /etc/systemd/system/HMIVinstanceName.service",
+        "customOutputStop": "root@",
+        "customShellNewReadyLineDetection": "root@"
+      },
+      "daemon-reloadSettings": {
+        "timeout": 5,
+        "command": "sudo systemctl daemon-reload",
+        "customOutputStop": "root@",
+        "customShellNewReadyLineDetection": "root@"
+      },
+      "restartInstanceSettings": {
+        "timeout": 5,
+        "command": "sudo systemctl restart HMIVinstanceName",
+        "customOutputStop": "root@",
+        "customShellNewReadyLineDetection": "root@"
+      },
+      "switchToNormalUserSettings": {
+        "timeout": 5,
+        "command": "su ADConnUsrn",
+        "customShellNewReadyLineDetection": "root@"
+      }
+    }
+  }
+```
+Mark: We change file strings through linux commands not by uploading the file itself. To provide permission problems, we do these command as root. You have to switch back to the normal connection user after all needed commands have been sent.
+
+
+### Example Set Service Default
+
+```javascript
+"setInstanceServiceFileService Defaultsystemd": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 1,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "switchToRoot",
+        "stopInstance",
+        "replaceFileString",
+        "daemon-reload",
+        "restartInstance",
+        "switchToNormalUser"
+      ],
+      "switchToRootSettings": {
+        "timeout": 5,
+        "command": "sudo su",
+        "customOutputStop": "root@"
+      },
+      "stopInstanceSettings": {
+        "timeout": 5,
+        "command": "sudo systemctl stop HMIVinstanceName",
+        "customOutputStop": "root@",
+        "customShellNewReadyLineDetection": "root@"
+      },
+      "replaceFileStringSettings": {
+        "timeout": 8,
+        "command": "sudo echo 'HMIVfileString' > /etc/default/HMIVinstanceName",
+        "customOutputStop": "root@",
+        "customShellNewReadyLineDetection": "root@"
+      },
+      "daemon-reloadSettings": {
+        "timeout": 5,
+        "command": "sudo systemctl daemon-reload",
+        "customOutputStop": "root@",
+        "customShellNewReadyLineDetection": "root@"
+      },
+      "restartInstanceSettings": {
+        "timeout": 5,
+        "command": "sudo systemctl restart HMIVinstanceName",
+        "customOutputStop": "root@",
+        "customShellNewReadyLineDetection": "root@"
+      },
+      "switchToNormalUserSettings": {
+        "timeout": 5,
+        "command": "su ADConnUsrn",
+        "customShellNewReadyLineDetection": "root@"
+      }
+    }
+  }
+```
 
 
 #### Others will be added soon!
