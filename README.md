@@ -751,6 +751,9 @@ Every set interaction is starting with `getInstanceServiceFile` followed by one 
 
 The following examples show the interaction with the instance type `systemd` for both service file types.
 
+The string of the file has to be transfered via the key `fileString`
+You can use `HMIVinstanceName` for get interactions and in set interactions also the `HMIVfileString` which offers you the content of the file
+
 `showLogAfterError` is not supported by this feature.
 
 
@@ -958,6 +961,135 @@ Mark: We change file strings through linux commands not by uploading the file it
     }
   }
 ```
+
+## Get the instance config
+
+Every time the app needs the homebridge config of a instance, this feature will be called.
+
+The string of the file has to be transfered via the key `fileString`
+
+`HMIVinstancePath` provides the path to the instance. (always ending with /)
+
+This feature is not customizable for every instance type, because it uses a instance related path to get the data.
+
+`showLogAfterError` is not supported by this feature.
+
+See the example for details.
+
+### Example
+
+```javascript
+"getInstanceConfig": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 1,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "getFileString"
+      ],
+      "getFileStringSettings": {
+        "timeout": 8,
+        "command": "sudo cat HMIVinstancePathconfig.json",
+        "analyze": [
+          {
+            "filter": {
+              "mode": "line",
+              "start": "sudo cat",
+              "stop": ":~",
+              "includeFilterMarkers": false,
+              "removeWhitespaces": false,
+              "removeLines": false
+            },
+            "extract": {
+              "repeat": "single",
+              "extractFrom": "nextPosition",
+              "values": {
+                "fileString": "VALUE"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+```
+
+## Set the instance config
+
+Every time the app saves the homebridge config of a instance, this feature will be called.
+
+`HMIVfileString` provieds the string of the config.
+
+`HMIVinstancePath` provides the path to the instance. (always ending with /)
+
+`HMIVinstanceName` provides the name of the instance.
+
+This feature is not customizable for every instance type, because it uses a instance related path to get the data.
+
+`showLogAfterError` is not supported by this feature.
+
+See the example for details.
+
+### Example
+
+```javascript
+"setInstanceConfig": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 1,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "switchToRoot",
+        "stopInstance",
+        "replaceFileString",
+        "daemon-reload",
+        "restartInstance",
+        "switchToNormalUser"
+      ],
+      "switchToRootSettings": {
+        "timeout": 5,
+        "command": "sudo su",
+        "customOutputStop": "root@"
+      },
+      "stopInstanceSettings": {
+        "timeout": 5,
+        "command": "sudo systemctl stop HMIVinstanceName",
+        "customOutputStop": "root@",
+        "customShellNewReadyLineDetection": "root@"
+      },
+      "replaceFileStringSettings": {
+        "timeout": 8,
+        "command": "sudo echo 'HMIVfileString' > HMIVinstancePathconfig.json",
+        "customOutputStop": "root@",
+        "customShellNewReadyLineDetection": "root@"
+      },
+      "daemon-reloadSettings": {
+        "timeout": 5,
+        "command": "sudo systemctl daemon-reload",
+        "customOutputStop": "root@",
+        "customShellNewReadyLineDetection": "root@"
+      },
+      "restartInstanceSettings": {
+        "timeout": 5,
+        "command": "sudo systemctl restart HMIVinstanceName",
+        "customOutputStop": "root@",
+        "customShellNewReadyLineDetection": "root@"
+      },
+      "switchToNormalUserSettings": {
+        "timeout": 5,
+        "command": "su ADConnUsrn",
+        "customShellNewReadyLineDetection": "root@"
+      }
+    }
+  }
+  
+  
+```
+Mark: We change file strings through linux commands not by uploading the file itself. To provide permission problems, we do these command as root. You have to switch back to the normal connection user after all needed commands have been sent.
+
+
 
 
 #### Others will be added soon!
