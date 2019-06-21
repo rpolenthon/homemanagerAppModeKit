@@ -1284,7 +1284,7 @@ Please take a look at the example!
 
 ## Main Installation
 
-### Full example
+### Full homemanager installation process example
 
 ```javascript
 "mainInstallation": {
@@ -1742,6 +1742,9 @@ Please take a look at the example!
       }
     }
 ```
+
+## Take a look at the repo for full examples of every mode
+
 
 ## License
 
