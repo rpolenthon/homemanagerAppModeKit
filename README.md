@@ -1090,11 +1090,658 @@ See the example for details.
 Mark: We change file strings through linux commands not by uploading the file itself. To provide permission problems, we do these command as root. You have to switch back to the normal connection user after all needed commands have been sent.
 
 
+## Add existing instances
 
+The user can add existing instances. 
+Every instanceType defined in the `instanceTypes` array, can be selected.
 
-#### Others will be added soon!
+In a `featureSettings` dictionary you have to define the `instanceTypeDefaultSelection` and for every instance type the dictionarys `normalInstancePresetsYOURTYPE` and `appInstallInstancePresetsYOURTYPE`.
 
+Both must include `instanceDisplayName`, `instanceName` and `instancePath`.
 
+Please take a look at the example!
+
+### Example
+
+```javascript
+"addExistingInstance": {
+    "otherModels": {
+      "isSupported": true,
+      "featureSettings": {
+        "instanceTypeDefaultSelection": "systemd",
+        "normalInstancePresetssystemd": {
+          "instanceDisplayName": "",
+          "instanceName": "homebridge-",
+          "instancePath": "/var/homebridge-"
+        },
+        "appInstallInstancePresetssystemd": {
+          "instanceDisplayName": "Homebridge",
+          "instanceName": "homebridge",
+          "instancePath": "/var/homebridge/"
+        }
+      }
+    }
+  }
+```
+
+## Add existing devices (Presets)
+
+This dictionary is used whether the app is configured for the specific app mode.
+
+It must include `displayName`, `connectionUsername` and `port` (uInt16).
+
+Please take a look at the example!
+
+### Example
+
+```javascript
+"addExistingDevicePresets": {
+    "displayName" : "HM Pi",
+    "connectionUsername": "pi",
+    "port": 22
+  }
+```
+
+# Homemanager private special functionality (Not completely dynamic, allows only less changes) 
+
+## Add a new instance
+
+### Presets example
+
+```javascript
+"createNewInstance": {
+    "otherModels": {
+      "isSupported": true,
+      "featureSettings": {
+        "wantNewUser": false,
+        "addUserCommand": "",
+        "userPermPath": "",
+        "userPerm": "",
+        "username": "homebridge",
+        "instanceName": "",
+        "instancePath": "",
+        "config": {
+          "bridge": {
+            "name": "",
+            "username": "",
+            "port": 1,
+            "pin": "031-45-154"
+          },
+          "description": "Added and managed with Homemanager App for Homebridge",
+          "platforms": [],
+          "accessories": []
+        },
+        "serviceString": "",
+        "serviceDefaultString": "",
+        "displayName": ""
+      }
+    }
+  }
+```
+
+### User example
+
+```javascript
+"createNewInstanceCreateUser": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 2,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "addUser",
+        "userCreatePerm",
+        "userInsertPerm"
+      ],
+      "addUserSettings": {
+        "timeout": 8,
+        "command": "HMIVaddUserCommand"
+      },
+      "userCreatePermSettings": {
+        "timeout": 8,
+        "command": "sudo touch HMIVuserPermPath"
+      },
+      "userInsertPermSettings": {
+        "timeout": 8,
+        "command": "sudo ex -sc '1i|HMIVuserPerm' -cx HMIVuserPermPath"
+      }
+    }
+  }
+```
+
+### Main part example
+
+```javascript
+"createNewInstanceMainPart": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 2,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "createInstancePath",
+        "createConfig",
+        "insertConfig",
+        "chownToUser",
+        "createService",
+        "insertService",
+        "createServiceDefault",
+        "insertServiceDefault",
+        "daemonReload",
+        "enableService",
+        "startInstance"
+      ],
+      "createInstancePathSettings": {
+        "timeout": 8,
+        "command": "sudo mkdir -p HMIVinstancePath"
+      },
+      "createConfigSettings": {
+        "timeout": 8,
+        "command": "sudo touch HMIVinstancePathconfig.json"
+      },
+      "insertConfigSettings": {
+        "timeout": 8,
+        "command": "sudo ex -sc '1i|HMIVconfig' -cx HMIVinstancePathconfig.json"
+      },
+      "chownToUserSettings": {
+        "timeout": 8,
+        "command": "sudo chown -R HMIVusername:HMIVusername HMIVpathWithoutSlash"
+      },
+      "createServiceSettings": {
+        "timeout": 8,
+        "command": "sudo touch /etc/systemd/system/HMIVinstanceName.service"
+      },
+      "insertServiceSettings": {
+        "timeout": 8,
+        "command": "sudo ex -sc '1i|HMIVserviceString' -cx /etc/systemd/system/HMIVinstanceName.service"
+      },
+      "createServiceDefaultSettings": {
+        "timeout": 8,
+        "command": "sudo touch /etc/default/HMIVinstanceName"
+      },
+      "insertServiceDefaultSettings": {
+        "timeout": 8,
+        "command": "sudo ex -sc '1i|HMIVserviceDefaultString' -cx /etc/default/HMIVinstanceName"
+      },
+      "daemonReloadSettings": {
+        "timeout": 8,
+        "command": "sudo systemctl daemon-reload"
+      },
+      "enableServiceSettings": {
+        "timeout": 8,
+        "command": "sudo systemctl enable HMIVinstanceName",
+        "successPossibilitys": [
+          "Created symlink"
+        ]
+      },
+      "startInstanceSettings": {
+        "timeout": 8,
+        "command": "sudo systemctl restart HMIVinstanceName"
+      }
+    }
+  }
+```
+
+## Main Installation
+
+### Full example
+
+```javascript
+"mainInstallation": {
+    "otherModels": {
+      "isSupported": true,
+      "featureSettings": {
+        "wantNewUser": true,
+        "addUserCommand": "sudo useradd -m -c 'Homebridge Service' -s /bin/bash -G audio,bluetooth,dialout,gpio,video homebridge",
+        "userPermPath": "/etc/sudoers.d/homebridge",
+        "userPerm": "homebridge ALL=(root) SETENV:NOPASSWD: /usr/local/bin/npm, /bin/systemctl restart homebridge, /bin/journalctl, /usr/local/bin/node",
+        "username": "homebridge",
+        "instanceName": "homebridge",
+        "instancePath": "/var/homebridge/",
+        "config": {
+          "bridge": {
+            "name": "Homebridge",
+            "username": "",
+            "port": 1,
+            "pin": "031-45-154"
+          },
+          "description": "Added and managed with Homemanager App for Homebridge",
+          "platforms": [],
+          "accessories": []
+        },
+        "serviceString": "",
+        "serviceDefaultString": "",
+        "restartSeconds": "10",
+        "insecureMode": true,
+        "displayName": "Homebridge",
+        "connectionUsername": "pi",
+        "connectionPort": 22,
+        "nodeVersion": "",
+        "homebridgeInstallationCommand": "sudo npm install -g --unsafe-perm homebridge",
+        "demoPiTemp": true
+      }
+    }
+  },
+  "mIsetNewHostname": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 3,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "command"
+      ],
+      "commandSettings": {
+        "timeout": 30,
+        "command": "sudo raspi-config nonint do_hostname HMIVnewHostname"
+      }
+    }
+  },
+  "mIsetNewPassword": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 3,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "command"
+      ],
+      "commandSettings": {
+        "timeout": 30,
+        "command": "(echo 'HMIVactivePassword' ; echo 'HMIVnewPassword' ; echo 'HMIVnewPassword') | passwd",
+        "successPossibilitys": [
+          "password updated successfully"
+        ]
+      }
+    }
+  },
+  "mIperformUpdate": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 3,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "command"
+      ],
+      "commandSettings": {
+        "timeout": 1200,
+        "command": "sudo apt-get update",
+        "successPossibilitys": [
+          "Reading package lists... Done"
+        ]
+      }
+    }
+  },
+  "mIperformUpgrade": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 3,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "command"
+      ],
+      "commandSettings": {
+        "timeout": 3600,
+        "command": "sudo apt-get upgrade"
+      }
+    }
+  },
+  "mIsetNewTimezone": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 3,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "remove",
+        "set"
+      ],
+      "removeSettings": {
+        "timeout": 30,
+        "command": "sudo rm /etc/timezone"
+      },
+      "setSettings": {
+        "timeout": 30,
+        "command": "echo 'HMIVtimezone' | sudo tee /etc/timezone"
+      }
+    }
+  },
+  "mIsetNewLocalTime": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 3,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "remove",
+        "set"
+      ],
+      "removeSettings": {
+        "timeout": 30,
+        "command": "sudo rm /etc/localtime"
+      },
+      "setSettings": {
+        "timeout": 30,
+        "command": "sudo cp /usr/share/zoneinfo/HMIVtimezone /etc/localtime"
+      }
+    }
+  },
+  "mIinstallAvahi": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 3,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "command"
+      ],
+      "commandSettings": {
+        "timeout": 1200,
+        "command": "sudo apt-get install libavahi-compat-libdnssd-dev"
+      }
+    }
+  },
+  "mIcheckARM": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 3,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "command"
+      ],
+      "commandSettings": {
+        "timeout": 30,
+        "command": "uname -m",
+        "analyze": [
+          {
+            "check": {
+              "checkFrom": "nextPosition",
+              "values": {
+                "armv7l": "armv7l"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "mIinstallNode": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 3,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "get",
+        "unzip",
+        "move"
+      ],
+      "getSettings": {
+        "timeout": 600,
+        "command": "wget https://nodejs.org/dist/vHMIVnodeVersion/node-vHMIVnodeVersion-linux-HMIVarmType.tar.gz",
+        "errorPossibilitys": {
+          "ERROR": "Node error"
+        },
+        "successPossibilitys": [
+          "’ saved"
+        ]
+      },
+      "unzipSettings": {
+        "timeout": 180,
+        "command": "tar xf node-vHMIVnodeVersion-linux-HMIVarmType.tar.gz"
+      },
+      "moveSettings": {
+        "timeout": 180,
+        "command": "sudo cp -R node-vHMIVnodeVersion-linux-HMIVarmType/* /usr/local/"
+      }
+    }
+  },
+  "mIcheckNodeInstallation": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 3,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "command"
+      ],
+      "commandSettings": {
+        "timeout": 30,
+        "command": "node -v",
+        "analyze": [
+          {
+            "filter": {
+              "mode": "line",
+              "start": "node",
+              "stop": ":~",
+              "includeFilterMarkers": false,
+              "removeWhitespaces": false,
+              "removeLines": false
+            },
+            "extract": {
+              "repeat": "single",
+              "extractFrom": "nextPosition",
+              "values": {
+                "outputString": "VALUE"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "mIaddHomebridgeUser": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 3,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "add",
+        "createPath",
+        "sendPerm"
+      ],
+      "addSettings": {
+        "timeout": 30,
+        "command": "HMIVaddUserCommand"
+      },
+      "createPathSettings": {
+        "timeout": 30,
+        "command": "sudo touch HMIVuserPermPath"
+      },
+      "sendPermSettings": {
+        "timeout": 30,
+        "command": "sudo ex -sc '1i|HMIVuserPerm' -cx HMIVuserPermPath"
+      }
+    }
+  },
+  "mIinstallHomebridge": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 3,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "command"
+      ],
+      "commandSettings": {
+        "timeout": 900,
+        "command": "HMIVhomebridgeInstallationCommand"
+      }
+    }
+  },
+  "mIcheckHomebridgeInstallation": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 3,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "command"
+      ],
+      "commandSettings": {
+        "timeout": 30,
+        "command": "sudo npm view homebridge version",
+        "analyze": [
+          {
+            "filter": {
+              "mode": "line",
+              "start": "npm view",
+              "stop": ":~",
+              "includeFilterMarkers": false,
+              "removeWhitespaces": false,
+              "removeLines": false
+            },
+            "extract": {
+              "repeat": "single",
+              "extractFrom": "nextPosition",
+              "values": {
+                "outputString": "VALUE"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "mIinstallDemoPlugin": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 3,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "command"
+      ],
+      "commandSettings": {
+        "timeout": 240,
+        "command": "sudo npm install -g --unsafe-perm homebridge-raspberrypi-temperature"
+      }
+    }
+  },
+  "mIprepareHBConfiguration": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 3,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "createPath",
+        "createConfig",
+        "insertConfig",
+        "chown"
+      ],
+      "createPathSettings": {
+        "timeout": 30,
+        "command": "sudo mkdir -p HMIVinstancePath"
+      },
+      "createConfigSettings": {
+        "timeout": 30,
+        "command": "sudo touch HMIVinstancePathconfig.json"
+      },
+      "insertConfigSettings": {
+        "timeout": 30,
+        "command": "sudo ex -sc '1i|HMIVconfig' -cx HMIVinstancePathconfig.json"
+      },
+      "chownSettings": {
+        "timeout": 30,
+        "command": "sudo chown -R HMIVusername:HMIVusername HMIVinstancePathWithoutSlash"
+      }
+    }
+  },
+  "mIprepareServiceConfiguration": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 3,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "createDotService",
+        "sendDotService",
+        "createServiceDefault",
+        "sendServiceDefault"
+      ],
+      "createDotServiceSettings": {
+        "timeout": 30,
+        "command": "sudo touch /etc/systemd/system/HMIVinstanceName.service"
+      },
+      "sendDotServiceSettings": {
+        "timeout": 30,
+        "command": "sudo ex -sc '1i|HMIVserviceString' -cx /etc/systemd/system/HMIVinstanceName.service"
+      },
+      "createServiceDefaultSettings": {
+        "timeout": 30,
+        "command": "sudo touch /etc/default/HMIVinstanceName"
+      },
+      "sendServiceDefaultSettings": {
+        "timeout": 30,
+        "command": "sudo ex -sc '1i|HMIVserviceDefaultString' -cx /etc/default/HMIVinstanceName"
+      }
+    }
+  },
+  "mIfinishUpInstance": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 3,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "daemonReload",
+        "enableService",
+        "startService"
+      ],
+      "daemonReloadSettings": {
+        "timeout": 30,
+        "command": "sudo systemctl daemon-reload"
+      },
+      "enableServiceSettings": {
+        "timeout": 30,
+        "command": "sudo systemctl enable HMIVinstanceName"
+      },
+      "startServiceSettings": {
+        "timeout": 30,
+        "command": "sudo systemctl restart HMIVinstanceName"
+      }
+    }
+  },
+  "mIconfigureWifi": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 3,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "setWifiCountry",
+        "sendWifiData"
+      ],
+      "sendWifiDataSettings": {
+        "timeout": 30,
+        "command": "sudo ex -sc '1i|HMIVwifiSettings' -cx /etc/wpa_supplicant/wpa_supplicant.conf"
+      },
+      "setWifiCountrySettings": {
+        "timeout": 30,
+        "command": "raspi-config nonint do_wifi_country HMIVwifiRegion"
+      }
+    }
+  },
+  "mIlastReboot": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 3,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "command"
+      ],
+      "commandSettings": {
+        "timeout": 10,
+        "command": "sudo reboot"
+      }
+    }
+```
 
 ## License
 
