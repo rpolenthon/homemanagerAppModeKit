@@ -1648,7 +1648,7 @@ Please take a look at the example!
       },
       "chownSettings": {
         "timeout": 30,
-        "command": "sudo chown -R HMIVusername:HMIVusername HMIVinstancePathWithoutSlash"
+        "command": "sudo chown -R HMIVusername:HMIVusername HMIVpathWithoutSlash"
       }
     }
   },
