@@ -1715,29 +1715,20 @@ Please take a look at the example!
       "showLogAfterError": false,
       "commandIDs": [
         "setWifiCountry",
-        "switchToRoot",
         "sendWifiData",
-        "switchToPi"
+        "reconfigureWifiData"
       ],
       "setWifiCountrySettings": {
         "timeout": 30,
         "command": "raspi-config nonint do_wifi_country HMIVwifiRegion"
       },
-      "switchToRootSettings": {
-        "timeout": 30,
-        "command": "sudo su",
-        "customOutputStop": "root@"
-      },
       "sendWifiDataSettings": {
         "timeout": 30,
-        "command": "echo 'HMIVwifiSettings' >> /etc/wpa_supplicant/wpa_supplicant.conf",
-        "customOutputStop": "root@",
-        "customShellNewReadyLineDetection": "root@"
+        "command": "sudo wpa_passphrase 'HMIVSSID' 'HMIVwifiPassword' | sudo tee -a /etc/wpa_supplicant/wpa_supplicant.conf"
       },
-      "switchToPiDataSettings": {
+      "reconfigureWifiDataSettings": {
         "timeout": 30,
-        "command": "su pi",
-        "customShellNewReadyLineDetection": "root@"
+        "command": "sudo wpa_cli -i wlan0 reconfigure"
       }
     }
   },
