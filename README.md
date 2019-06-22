@@ -1019,6 +1019,8 @@ See the example for details.
 
 Every time the app saves the homebridge config of a instance, this feature will be called.
 
+Before the interation the stopping feature is called and afterwards the restarting feature is called.
+
 `HMIVfileString` provieds the string of the config.
 
 `HMIVinstancePath` provides the path to the instance. (always ending with /)
@@ -1042,10 +1044,7 @@ See the example for details.
       "showLogAfterError": false,
       "commandIDs": [
         "switchToRoot",
-        "stopInstance",
         "replaceFileString",
-        "daemon-reload",
-        "restartInstance",
         "switchToNormalUser"
       ],
       "switchToRootSettings": {
@@ -1053,27 +1052,9 @@ See the example for details.
         "command": "sudo su",
         "customOutputStop": "root@"
       },
-      "stopInstanceSettings": {
-        "timeout": 5,
-        "command": "sudo systemctl stop HMIVinstanceName",
-        "customOutputStop": "root@",
-        "customShellNewReadyLineDetection": "root@"
-      },
       "replaceFileStringSettings": {
         "timeout": 8,
         "command": "sudo echo 'HMIVfileString' > HMIVinstancePathconfig.json",
-        "customOutputStop": "root@",
-        "customShellNewReadyLineDetection": "root@"
-      },
-      "daemon-reloadSettings": {
-        "timeout": 5,
-        "command": "sudo systemctl daemon-reload",
-        "customOutputStop": "root@",
-        "customShellNewReadyLineDetection": "root@"
-      },
-      "restartInstanceSettings": {
-        "timeout": 5,
-        "command": "sudo systemctl restart HMIVinstanceName",
         "customOutputStop": "root@",
         "customShellNewReadyLineDetection": "root@"
       },
@@ -1141,6 +1122,77 @@ Please take a look at the example!
     "port": 22
   }
 ```
+
+## Set new Localization
+
+This feature changes the localtime and timezone of supported devices.
+
+Provided is the timezone with `HMIVtimezone` in a format as "Europe/Berlin"
+
+
+Please take a look at the example!
+
+### Example
+
+```javascript
+"setNewLocalizaion": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 2,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "removeTimezone",
+        "setTimezone",
+        "removeLocaltime",
+        "setLocaltime"
+      ],
+      "removeTimezoneSettings": {
+        "timeout": 8,
+        "command": "sudo rm /etc/timezone"
+      },
+      "setTimezoneSettings": {
+        "timeout": 12,
+        "command": "echo 'HMIVtimezone' | sudo tee /etc/timezone"
+      },
+      "removeLocaltimeSettings": {
+        "timeout": 8,
+        "command": "sudo rm /etc/localtime"
+      },
+      "setLocaltimeSettings": {
+        "timeout": 12,
+        "command": "sudo cp /usr/share/zoneinfo/HMIVtimezone /etc/localtime"
+      }
+    }
+  }
+```
+
+## Reboot Server
+
+This feature changes reboots the server. It is used internaly in other features and can be used in the interface soon.
+
+Please take a look at the example!
+
+### Example
+
+```javascript
+  "rebootServer": {
+    "otherModels": {
+      "isSupported": true,
+      "shellType": "single",
+      "shellNumber": 1,
+      "showLogAfterError": false,
+      "commandIDs": [
+        "command"
+      ],
+      "commandSettings": {
+        "timeout": 3,
+        "command": "sudo reboot"
+      }
+    }
+  }
+```
+
 
 # Homemanager private special functionality (Not completely dynamic, allows only less changes) 
 
